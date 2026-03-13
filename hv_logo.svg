@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" width="480" height="160">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6BBDD6"/>
+      <stop offset="50%" style="stop-color:#4A9EBF"/>
+      <stop offset="100%" style="stop-color:#1A5C78"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="sglow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="480" height="160" fill="#080C10"/>
+  <polygon points="12,0 468,0 480,12 480,148 468,160 12,160 0,148 0,12" fill="none" stroke="#4A9EBF" stroke-width="1" opacity="0.25"/>
+  <polygon points="56,18 88,18 104,46 104,94 88,122 56,122 40,94 40,46" fill="none" stroke="url(#blueGrad)" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="60,24 84,24 96,46 96,94 84,116 60,116 48,94 48,46" fill="#4A9EBF" fill-opacity="0.06"/>
+  <polygon points="77,30 57,78 70,78 63,130 87,74 73,74" fill="url(#blueGrad)" filter="url(#glow)"/>
+  <line x1="122" y1="28" x2="122" y2="132" stroke="#4A9EBF" stroke-width="0.75" opacity="0.3"/>
+  <text x="138" y="108" font-family="Anton,Impact,sans-serif" font-size="88" letter-spacing="6" fill="url(#blueGrad)" filter="url(#sglow)">HV</text>
+  <line x1="276" y1="28" x2="276" y2="132" stroke="#4A9EBF" stroke-width="0.75" opacity="0.2"/>
+  <text x="292" y="72" font-family="JetBrains Mono,Courier New,monospace" font-size="13" letter-spacing="5" fill="#4A9EBF" opacity="0.9">INDUSTRIES</text>
+  <line x1="292" y1="78" x2="452" y2="78" stroke="#4A9EBF" stroke-width="0.5" opacity="0.3"/>
+  <text x="292" y="98" font-family="JetBrains Mono,Courier New,monospace" font-size="10" letter-spacing="3" fill="#5A7A90">HIGH VOLTAGE TECH</text>
+  <text x="292" y="122" font-family="JetBrains Mono,Courier New,monospace" font-size="9" letter-spacing="2" fill="#4A9EBF" opacity="0.4">SCHERTZ, TEXAS</text>
+  <polyline points="20,8 8,8 8,20" fill="none" stroke="#4A9EBF" stroke-width="1.5" opacity="0.6"/>
+  <polyline points="460,8 472,8 472,20" fill="none" stroke="#4A9EBF" stroke-width="1.5" opacity="0.6"/>
+  <polyline points="20,152 8,152 8,140" fill="none" stroke="#4A9EBF" stroke-width="1.5" opacity="0.6"/>
+  <polyline points="460,152 472,152 472,140" fill="none" stroke="#4A9EBF" stroke-width="1.5" opacity="0.6"/>
+</svg>

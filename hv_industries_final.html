@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HV Industries — High Voltage Tech Solutions · Schertz, TX</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+:root {
+  --bg:        #07090D;
+  --bg2:       #0B0F16;
+  --bg3:       #0F1520;
+  --panel:     #111926;
+  --panel2:    #162030;
+  --border:    rgba(74,158,191,0.12);
+  --border2:   rgba(74,158,191,0.22);
+  --blue:      #4A9EBF;
+  --blue-lt:   #6BBDD6;
+  --blue-dk:   #1E5C78;
+  --white:     #E8F0F5;
+  --grey:      #4A6070;
+  --grey2:     #6A8090;
+  --mono:      'JetBrains Mono', monospace;
+  --display:   'Anton', sans-serif;
+  --body:      'Syne', sans-serif;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESET & BASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+body {
+  background:var(--bg);
+  color:var(--white);
+  font-family:var(--body);
+  overflow-x:hidden;
+  cursor:none;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CURSOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.cur-dot {
+  position:fixed; width:6px; height:6px;
+  background:var(--blue-lt); border-radius:50%;
+  pointer-events:none; z-index:9999;
+  transform:translate(-50%,-50%);
+}
+.cur-ring {
+  position:fixed; width:28px; height:28px;
+  border:1px solid var(--blue); border-radius:50%;
+  pointer-events:none; z-index:9998;
+  transform:translate(-50%,-50%);
+  opacity:0.5; transition:opacity .3s;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NAVIGATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.nav {
+  position:fixed; top:0; left:0; right:0; z-index:900;
+  height:68px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 60px;
+  background:rgba(7,9,13,0.92);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo {
+  display:flex; align-items:center; gap:12px;
+  text-decoration:none;
+}
+.nav-logo-icon {
+  width:36px; height:36px; flex-shrink:0;
+}
+.nav-logo-text {
+  display:flex; flex-direction:column; gap:1px;
+}
+.nav-logo-hv {
+  font-family:var(--display);
+  font-size:22px; letter-spacing:4px;
+  color:var(--blue-lt); line-height:1;
+}
+.nav-logo-sub {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:3px; color:var(--grey2);
+  text-transform:uppercase;
+}
+.nav-center {
+  display:flex; gap:0; list-style:none;
+  position:absolute; left:50%; transform:translateX(-50%);
+}
+.nav-center a {
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--grey2); text-decoration:none;
+  padding:8px 18px; display:block;
+  transition:color .2s;
+  position:relative;
+}
+.nav-center a::after {
+  content:''; position:absolute;
+  bottom:-1px; left:18px; right:18px;
+  height:1px; background:var(--blue);
+  transform:scaleX(0); transition:transform .2s;
+}
+.nav-center a:hover { color:var(--blue-lt); }
+.nav-center a:hover::after { transform:scaleX(1); }
+.nav-btn {
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:#fff; background:var(--blue);
+  border:none; padding:11px 24px;
+  text-decoration:none; cursor:none;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  transition:background .2s, box-shadow .2s;
+}
+.nav-btn:hover {
+  background:var(--blue-lt);
+  box-shadow:0 0 24px rgba(74,158,191,0.4);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:120px 60px 100px;
+  position:relative; overflow:hidden;
+}
+
+/* animated particle canvas */
+#threeCanvas { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.7; }
+
+/* subtle radial glow behind hero text */
+.hero-glow {
+  position:absolute; top:10%; left:-10%;
+  width:60vw; height:60vw; max-width:800px; max-height:800px;
+  background:radial-gradient(circle, rgba(74,158,191,0.07) 0%, transparent 65%);
+  pointer-events:none; z-index:0;
+}
+
+.hero-inner {
+  position:relative; z-index:2;
+  display:grid;
+  grid-template-columns:1fr 480px;
+  gap:60px;
+  align-items:center;
+  width:100%;
+  max-width:1200px;
+}
+.hero-text { /* left column */ }
+
+/* ── LOGO RING ANIMATION ── */
+.hero-logo-wrap {
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  width:100%; aspect-ratio:1;
+  max-width:480px;
+}
+.hero-ring {
+  position:absolute;
+  border-radius:50%;
+  border:1px solid var(--blue);
+  animation:ringPulse 3s ease-in-out infinite;
+  opacity:0;
+}
+.hero-ring:nth-child(1) { width:20%;  height:20%;  animation-delay:0s;    border-color:var(--blue-lt); border-width:1.5px; }
+.hero-ring:nth-child(2) { width:36%;  height:36%;  animation-delay:.35s;  border-color:var(--blue); }
+.hero-ring:nth-child(3) { width:52%;  height:52%;  animation-delay:.7s;   border-color:var(--blue); border-style:dashed; }
+.hero-ring:nth-child(4) { width:68%;  height:68%;  animation-delay:1.05s; border-color:rgba(74,158,191,.5); }
+.hero-ring:nth-child(5) { width:84%;  height:84%;  animation-delay:1.4s;  border-color:rgba(74,158,191,.25); }
+.hero-ring:nth-child(6) { width:100%; height:100%; animation-delay:1.75s; border-color:rgba(74,158,191,.1); }
+
+@keyframes ringPulse {
+  0%   { opacity:0;    transform:scale(.85); }
+  30%  { opacity:1; }
+  70%  { opacity:.6; }
+  100% { opacity:0;    transform:scale(1.05); }
+}
+
+.hero-logo-center {
+  position:relative; z-index:2;
+  width:96px; height:96px;
+  background:rgba(74,158,191,0.06);
+  border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 40px rgba(74,158,191,0.15), inset 0 0 24px rgba(74,158,191,0.05);
+}
+.hero-logo-center svg { width:52px; height:52px; }
+
+/* rotating orbit dot */
+.hero-orbit {
+  position:absolute;
+  width:100%; height:100%;
+  animation:orbitSpin 8s linear infinite;
+}
+.hero-orbit-dot {
+  position:absolute;
+  top:0; left:50%; transform:translateX(-50%);
+  width:6px; height:6px;
+  background:var(--blue-lt);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--blue-lt);
+  margin-top:-3px;
+}
+.hero-orbit-dot-2 {
+  position:absolute;
+  bottom:0; left:50%; transform:translateX(-50%);
+  width:4px; height:4px;
+  background:var(--blue);
+  border-radius:50%;
+  margin-bottom:-2px;
+  opacity:.5;
+}
+@keyframes orbitSpin {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+
+@media(max-width:960px) {
+  .hero-inner { grid-template-columns:1fr; gap:40px; }
+  .hero-logo-wrap { max-width:280px; margin:0 auto; }
+}
+
+.hero-tag {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:3px; color:var(--blue); text-transform:uppercase;
+  margin-bottom:36px;
+  opacity:0; animation:fadeUp .6s ease forwards .2s;
+}
+.hero-tag-line { width:32px; height:1px; background:var(--blue); opacity:.5; }
+
+.hero-h1 {
+  font-family:var(--display);
+  font-size:clamp(64px, 11vw, 160px);
+  line-height:.9; letter-spacing:1px;
+  margin-bottom:36px;
+  opacity:0; animation:fadeUp .7s ease forwards .4s;
+}
+.hero-h1 em {
+  font-style:normal;
+  -webkit-text-stroke:1px rgba(74,158,191,0.5);
+  color:transparent;
+}
+.hero-h1 strong {
+  font-style:normal; color:var(--blue-lt);
+}
+
+.hero-desc {
+  font-size:17px; line-height:1.85;
+  color:var(--grey2); max-width:520px;
+  margin-bottom:52px;
+  opacity:0; animation:fadeUp .7s ease forwards .6s;
+}
+.hero-desc b { color:var(--white); font-weight:600; }
+
+.hero-cta {
+  display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  opacity:0; animation:fadeUp .7s ease forwards .8s;
+}
+.btn-primary {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:11px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:#fff; background:var(--blue);
+  padding:15px 32px; text-decoration:none;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  transition:background .2s, box-shadow .2s, transform .15s;
+}
+.btn-primary:hover {
+  background:var(--blue-lt); transform:translateY(-2px);
+  box-shadow:0 12px 32px rgba(74,158,191,0.35);
+}
+.btn-ghost {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:11px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--grey2); text-decoration:none;
+  border:1px solid var(--border2);
+  padding:15px 32px;
+  transition:color .2s, border-color .2s;
+}
+.btn-ghost:hover { color:var(--blue-lt); border-color:var(--blue); }
+
+/* hero stats bar */
+.hero-stats {
+  position:absolute; bottom:0; left:0; right:0; z-index:2;
+  display:flex; border-top:1px solid var(--border);
+  background:rgba(7,9,13,0.7); backdrop-filter:blur(16px);
+  opacity:0; animation:fadeUp .6s ease forwards 1s;
+}
+.hstat {
+  flex:1; text-align:center; padding:20px 16px;
+  border-right:1px solid var(--border);
+}
+.hstat:last-child { border-right:none; }
+.hstat-n {
+  font-family:var(--display); font-size:36px;
+  color:var(--blue-lt); line-height:1;
+  margin-bottom:4px;
+}
+.hstat-l {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--grey);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TICKER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.ticker {
+  background:var(--blue);
+  overflow:hidden; padding:13px 0;
+  border-top:1px solid var(--blue-lt);
+  border-bottom:1px solid var(--blue-dk);
+}
+.ticker-track {
+  display:flex; white-space:nowrap;
+  animation:ticker 40s linear infinite;
+}
+.ticker-track:hover { animation-play-state:paused; }
+.t-word {
+  font-family:var(--display); font-size:14px;
+  letter-spacing:4px; color:#fff;
+  padding:0 36px; text-transform:uppercase;
+}
+.t-dot {
+  display:inline-flex; align-items:center;
+  color:rgba(255,255,255,0.4); font-size:6px; padding:0 4px;
+}
+@keyframes ticker {
+  0% { transform:translateX(0); }
+  100% { transform:translateX(-50%); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SECTION SCAFFOLD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.sec { padding:120px 60px; position:relative; }
+.sec-alt { background:var(--bg2); }
+.sec-dark { background:var(--bg3); }
+
+.eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:4px; color:var(--blue); text-transform:uppercase;
+  margin-bottom:20px;
+}
+.eyebrow-line { width:28px; height:1px; background:var(--blue); opacity:.5; }
+
+.sec-title {
+  font-family:var(--display);
+  font-size:clamp(48px,5.5vw,80px);
+  line-height:.95; letter-spacing:1px;
+  margin-bottom:64px;
+}
+.sec-title .dim {
+  -webkit-text-stroke:1px rgba(74,158,191,0.35);
+  color:transparent;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SERVICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.svcs-layout {
+  display:grid; grid-template-columns:280px 1fr;
+  gap:80px; align-items:start;
+}
+.svcs-sidebar { position:sticky; top:88px; }
+.svcs-sidebar p {
+  font-size:15px; color:var(--grey2); line-height:1.85;
+  margin-bottom:32px;
+}
+.svcs-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:1px; background:var(--border);
+}
+.svc-card {
+  background:var(--panel); padding:36px 32px;
+  position:relative; overflow:hidden;
+  transition:background .25s, transform .25s;
+  cursor:none;
+}
+.svc-card::before {
+  content:''; position:absolute;
+  top:0; left:0; width:0; height:2px;
+  background:var(--blue);
+  transition:width .35s ease;
+}
+.svc-card:hover { background:var(--panel2); transform:translateY(-2px); }
+.svc-card:hover::before { width:100%; }
+.svc-n {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:3px; color:var(--blue-dk);
+  margin-bottom:20px;
+}
+.svc-icon {
+  width:44px; height:44px;
+  border:1px solid var(--border2);
+  background:rgba(74,158,191,0.05);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+  transition:border-color .25s, background .25s;
+}
+.svc-card:hover .svc-icon {
+  border-color:var(--blue);
+  background:rgba(74,158,191,0.1);
+}
+.svc-icon svg { width:20px; height:20px; stroke:var(--blue); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.svc-name {
+  font-family:var(--body); font-size:16px; font-weight:700;
+  color:var(--white); margin-bottom:10px; letter-spacing:.3px;
+}
+.svc-desc { font-size:13px; color:var(--grey2); line-height:1.8; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AI & TECH EDGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.ai-intro-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center; margin-bottom:80px;
+}
+.ai-intro-left h3 {
+  font-family:var(--display); font-size:clamp(32px,3.5vw,52px);
+  line-height:1; letter-spacing:1px; margin-bottom:24px; color:var(--white);
+}
+.ai-intro-left p {
+  font-size:15px; color:var(--grey2); line-height:1.9;
+}
+.ai-intro-right {
+  border:1px solid var(--border2);
+  background:linear-gradient(135deg, rgba(74,158,191,0.05), transparent);
+  padding:36px;
+}
+.ai-intro-right p {
+  font-size:15px; color:var(--white); line-height:1.9;
+  font-style:italic; margin-bottom:20px;
+}
+.ai-intro-right cite {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:3px; color:var(--blue); text-transform:uppercase;
+  font-style:normal;
+}
+
+.ai-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:var(--border);
+  margin-bottom:48px;
+}
+.ai-card {
+  background:var(--panel); padding:36px 32px;
+  position:relative; overflow:hidden;
+  transition:background .25s;
+  cursor:none;
+}
+.ai-card::before {
+  content:''; position:absolute;
+  top:0; left:0; width:0; height:2px;
+  background:linear-gradient(90deg, var(--blue-lt), var(--blue));
+  transition:width .35s ease;
+}
+.ai-card:hover { background:var(--panel2); }
+.ai-card:hover::before { width:100%; }
+.ai-tag {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:3px; color:var(--blue);
+  border:1px solid var(--border2); padding:4px 10px;
+  display:inline-block; margin-bottom:20px; text-transform:uppercase;
+}
+.ai-card .svc-icon { margin-bottom:16px; }
+.ai-card .svc-name { font-size:15px; }
+.ai-card .svc-desc { font-size:13px; }
+
+/* advantage banner */
+.advantage {
+  display:grid; grid-template-columns:auto 1fr;
+  gap:40px; align-items:center;
+  border:1px solid var(--border2);
+  background:linear-gradient(135deg, rgba(74,158,191,0.06), transparent 70%);
+  padding:48px;
+}
+.advantage-icon {
+  width:64px; height:64px; flex-shrink:0;
+  border:1px solid var(--border2);
+  background:rgba(74,158,191,0.08);
+  display:flex; align-items:center; justify-content:center;
+}
+.advantage-icon svg { width:28px; height:28px; stroke:var(--blue-lt); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.advantage-title {
+  font-family:var(--display); font-size:clamp(24px,2.5vw,36px);
+  letter-spacing:2px; color:var(--white); margin-bottom:12px;
+}
+.advantage-body { font-size:15px; color:var(--grey2); line-height:1.9; max-width:680px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ABOUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.about-layout {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center;
+}
+.about-frame {
+  position:relative;
+  aspect-ratio:4/5;
+  background:var(--panel);
+  border:1px solid var(--border2);
+  overflow:hidden;
+}
+.about-frame-inner {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+}
+.about-frame-inner svg { opacity:.2; }
+.about-frame-label {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:4px; color:var(--grey); text-transform:uppercase;
+}
+/* corner accents */
+.fc { position:absolute; width:24px; height:24px; border-color:var(--blue); border-style:solid; opacity:.5; }
+.fc-tl { top:12px; left:12px; border-width:1px 0 0 1px; }
+.fc-tr { top:12px; right:12px; border-width:1px 1px 0 0; }
+.fc-bl { bottom:12px; left:12px; border-width:0 0 1px 1px; }
+.fc-br { bottom:12px; right:12px; border-width:0 1px 1px 0; }
+/* floating badge */
+.about-badge {
+  position:absolute; bottom:-16px; right:-16px;
+  background:var(--blue); color:#fff;
+  font-family:var(--display); font-size:13px; letter-spacing:3px;
+  padding:16px 24px; z-index:2; text-transform:uppercase;
+}
+.about-badge span {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:2px; display:block; margin-top:2px;
+  color:rgba(255,255,255,0.6);
+}
+
+.about-lead {
+  font-size:17px; color:var(--white);
+  line-height:1.8; font-weight:600; margin-bottom:20px;
+}
+.about-body {
+  font-size:14px; color:var(--grey2);
+  line-height:1.9; margin-bottom:36px;
+}
+.tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:36px; }
+.tag {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--blue); border:1px solid var(--border2);
+  padding:6px 14px;
+  transition:background .2s, border-color .2s;
+}
+.tag:hover { background:rgba(74,158,191,0.08); border-color:var(--blue); }
+.about-quote {
+  border-left:2px solid var(--blue);
+  padding:16px 0 16px 24px;
+  font-size:14px; color:var(--grey2);
+  font-style:italic; line-height:1.8;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RATES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.rates-layout {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center;
+}
+.rates-list { list-style:none; display:flex; flex-direction:column; gap:0; }
+.rates-list li {
+  display:flex; align-items:center; gap:16px;
+  font-size:14px; color:var(--grey2); line-height:1.7;
+  padding:16px 0; border-bottom:1px solid var(--border);
+}
+.rates-list li:last-child { border-bottom:none; }
+.rates-dot { width:5px; height:5px; background:var(--blue); border-radius:50%; flex-shrink:0; }
+.rate-card {
+  background:var(--panel);
+  border:1px solid var(--border2);
+  padding:56px 48px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.rate-card::before {
+  content:''; position:absolute;
+  top:-60px; left:50%; transform:translateX(-50%);
+  width:240px; height:240px;
+  background:radial-gradient(circle, rgba(74,158,191,0.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+.rate-rc { position:absolute; width:20px; height:20px; border-color:var(--blue); border-style:solid; opacity:.3; }
+.rate-rc.tl { top:16px; left:16px; border-width:1px 0 0 1px; }
+.rate-rc.br { bottom:16px; right:16px; border-width:0 1px 1px 0; }
+.rate-label {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:4px; text-transform:uppercase;
+  color:var(--grey); margin-bottom:20px;
+}
+.rate-price {
+  font-family:var(--display); font-size:108px;
+  color:var(--blue-lt); line-height:1; letter-spacing:-4px;
+  text-shadow:0 0 60px rgba(74,158,191,0.25);
+}
+.rate-per {
+  font-family:var(--mono); font-size:11px;
+  letter-spacing:4px; color:var(--grey);
+  text-transform:uppercase; margin:12px 0 28px;
+}
+.rate-divider { width:32px; height:1px; background:var(--border2); margin:0 auto 28px; }
+.rate-note { font-size:13px; color:var(--grey2); line-height:1.8; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CONTACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.contact-layout {
+  display:grid; grid-template-columns:1fr 1.4fr;
+  gap:80px; align-items:start;
+}
+.contact-intro p {
+  font-size:15px; color:var(--grey2);
+  line-height:1.85; margin-bottom:48px;
+}
+.cinfo { display:flex; flex-direction:column; gap:0; }
+.cinfo-row {
+  display:flex; align-items:flex-start; gap:18px;
+  padding:20px 0; border-bottom:1px solid var(--border);
+}
+.cinfo-row:last-child { border-bottom:none; }
+.cinfo-icon {
+  width:40px; height:40px; flex-shrink:0;
+  border:1px solid var(--border2);
+  background:rgba(74,158,191,0.05);
+  display:flex; align-items:center; justify-content:center;
+}
+.cinfo-icon svg { width:16px; height:16px; stroke:var(--blue); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.cinfo-label {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--grey); margin-bottom:5px;
+}
+.cinfo-val { font-size:17px; color:var(--white); font-weight:600; }
+
+.contact-form {
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:48px 44px;
+  position:relative;
+}
+.contact-form::before {
+  content:'// CONTACT';
+  position:absolute; top:20px; right:24px;
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:3px; color:var(--border2);
+}
+.frow { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.fg { margin-bottom:20px; }
+.fg label {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--grey); display:block; margin-bottom:8px;
+}
+.fg input, .fg textarea {
+  width:100%; background:var(--panel2);
+  border:1px solid var(--border);
+  color:var(--white); font-family:var(--body);
+  font-size:14px; padding:13px 16px;
+  outline:none; resize:none;
+  transition:border-color .2s, background .2s;
+}
+.fg input:focus, .fg textarea:focus {
+  border-color:var(--blue);
+  background:rgba(74,158,191,0.04);
+}
+.fg textarea { height:120px; }
+.f-submit {
+  width:100%; background:var(--blue); color:#fff;
+  font-family:var(--mono); font-size:11px;
+  letter-spacing:3px; text-transform:uppercase;
+  padding:16px; border:none; cursor:none; margin-top:4px;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  transition:background .2s, box-shadow .2s;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.f-submit:hover {
+  background:var(--blue-lt);
+  box-shadow:0 8px 28px rgba(74,158,191,0.3);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FOOTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.footer {
+  background:var(--bg3);
+  border-top:1px solid var(--border);
+  padding:40px 60px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px;
+}
+.footer-logo {
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none;
+}
+.footer-logo-hv {
+  font-family:var(--display); font-size:18px;
+  letter-spacing:4px; color:var(--blue-lt);
+}
+.footer-nav { display:flex; gap:28px; }
+.footer-nav a {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--grey); text-decoration:none;
+  transition:color .2s;
+}
+.footer-nav a:hover { color:var(--blue-lt); }
+.footer-copy {
+  font-family:var(--mono); font-size:8px;
+  letter-spacing:1px; color:var(--grey);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SCROLL REVEAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.r { opacity:0; transform:translateY(36px); transition:opacity .7s ease, transform .7s ease; }
+.r.show { opacity:1; transform:translateY(0); }
+.rl { opacity:0; transform:translateX(-36px); transition:opacity .7s ease, transform .7s ease; }
+.rl.show { opacity:1; transform:translateX(0); }
+.rr { opacity:0; transform:translateX(36px); transition:opacity .7s ease, transform .7s ease; }
+.rr.show { opacity:1; transform:translateX(0); }
+.d1{transition-delay:.05s} .d2{transition-delay:.1s} .d3{transition-delay:.15s}
+.d4{transition-delay:.2s}  .d5{transition-delay:.25s} .d6{transition-delay:.3s}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESPONSIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media(max-width:960px) {
+  .nav { padding:0 24px; }
+  .nav-center { display:none; }
+  .hero { padding:100px 24px 100px; }
+  .sec { padding:80px 24px; }
+  .svcs-layout { grid-template-columns:1fr; gap:40px; }
+  .svcs-sidebar { position:static; }
+  .ai-intro-row { grid-template-columns:1fr; gap:40px; }
+  .ai-grid { grid-template-columns:1fr 1fr; }
+  .about-layout { grid-template-columns:1fr; gap:48px; }
+  .about-badge { display:none; }
+  .rates-layout { grid-template-columns:1fr; gap:48px; }
+  .contact-layout { grid-template-columns:1fr; gap:40px; }
+  .frow { grid-template-columns:1fr; }
+  .footer { flex-direction:column; text-align:center; gap:20px; }
+  .footer-nav { flex-wrap:wrap; justify-content:center; }
+  .advantage { grid-template-columns:1fr; gap:24px; padding:32px 28px; }
+}
+@media(max-width:600px) {
+  .svcs-grid { grid-template-columns:1fr; }
+  .ai-grid { grid-template-columns:1fr; }
+  .hero-h1 { font-size:clamp(52px,15vw,90px); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   WORK / PROOF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.proof-grid {
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:1px; background:var(--border);
+}
+.proof-card {
+    background:var(--panel); padding:36px 32px;
+    position:relative; overflow:hidden;
+    transition:background .25s;
+    cursor:none;
+}
+.proof-card::before {
+    content:''; position:absolute;
+    top:0; left:0; width:0; height:2px;
+    background:var(--blue); transition:width .35s ease;
+}
+.proof-card:hover { background:var(--panel2); }
+.proof-card:hover::before { width:100%; }
+.proof-card-top {
+    display:flex; justify-content:space-between;
+    align-items:flex-start; margin-bottom:20px;
+}
+.proof-tag {
+    font-family:var(--mono); font-size:8px;
+    letter-spacing:3px; text-transform:uppercase;
+    color:var(--blue); border:1px solid var(--border2);
+    padding:4px 10px;
+}
+.proof-icon {
+    width:36px; height:36px;
+    border:1px solid var(--border);
+    background:rgba(74,158,191,0.05);
+    display:flex; align-items:center; justify-content:center;
+}
+.proof-title {
+    font-family:var(--body); font-size:17px; font-weight:700;
+    color:var(--white); margin-bottom:12px;
+}
+.proof-desc { font-size:13px; color:var(--grey2); line-height:1.8; margin-bottom:24px; }
+.proof-result {
+    border-top:1px solid var(--border); padding-top:16px;
+    display:flex; flex-direction:column; gap:4px;
+}
+.proof-result-label {
+    font-family:var(--mono); font-size:8px;
+    letter-spacing:3px; text-transform:uppercase; color:var(--blue);
+}
+.proof-result-val { font-size:13px; color:var(--grey2); line-height:1.6; }
+
+/* ── TESTIMONIALS ── */
+.testi-grid {
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:1px; background:var(--border);
+}
+.testi-card {
+    background:var(--panel2); padding:36px 32px;
+    position:relative;
+}
+.testi-quote-mark {
+    font-family:var(--display); font-size:64px;
+    color:var(--blue); line-height:.8;
+    opacity:.3; margin-bottom:16px;
+}
+.testi-text {
+    font-size:14px; color:var(--white);
+    line-height:1.85; font-style:italic;
+    margin-bottom:28px;
+}
+.testi-author { display:flex; align-items:center; gap:14px; }
+.testi-avatar {
+    width:40px; height:40px; flex-shrink:0;
+    background:rgba(74,158,191,0.15);
+    border:1px solid var(--border2);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-size:18px; color:var(--blue-lt);
+}
+.testi-name {
+    font-size:14px; font-weight:700; color:var(--white); margin-bottom:3px;
+}
+.testi-role {
+    font-family:var(--mono); font-size:9px;
+    letter-spacing:2px; color:var(--grey); text-transform:uppercase;
+}
+
+@media(max-width:960px) {
+    .proof-grid { grid-template-columns:1fr; }
+    .testi-grid { grid-template-columns:1fr; }
+}
+
+
+/* ── SPACING NORMALIZATION ── */
+.sec-title--tight { margin-bottom:32px !important; }
+
+.contact-intro-p {
+    font-size:15px; color:var(--grey2);
+    line-height:1.85; margin-bottom:48px;
+}
+
+.testi-label {
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:9px;
+    letter-spacing:4px; color:var(--blue); text-transform:uppercase;
+    margin-bottom:20px; margin-top:64px;
+}
+
+/* Placeholder styling — subtle, not embarrassing */
+.proof-placeholder { color:var(--grey2) !important; font-style:italic; }
+.proof-placeholder-text { color:var(--grey) !important; font-style:italic; opacity:.6; }
+
+/* ── CONSISTENT CARD HOVER ACROSS ALL GRIDS ── */
+.proof-card:hover, .ai-card:hover, .svc-card:hover {
+    background:var(--panel2);
+}
+
+/* ── TICKER PAUSE ON HOVER ── */
+.ticker-track { will-change:transform; }
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   UTILITIES — no more inline styles
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.btn-mt { display:inline-flex; margin-top:28px; }
+.ai-body-p { font-size:15px; color:var(--grey2); line-height:1.9; margin-top:20px; }
+.rates-intro { font-size:15px; color:var(--grey2); line-height:1.85; margin-bottom:40px; }
+.text-me {
+  text-align:center; margin-top:16px;
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:2px; color:var(--grey);
+}
+.text-me-link { color:var(--blue); text-decoration:none; }
+.text-me-link:hover { color:var(--blue-lt); }
+.cinfo-sub { font-size:13px; color:var(--grey2); }
+.hstat-icon { font-size:28px; display:flex; align-items:center; justify-content:center; }
+
+
+#pcbCanvas {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  z-index:0; pointer-events:none;
+  opacity:0.18;
+}
+#ai { position:relative; overflow:hidden; }
+#ai > * { position:relative; z-index:1; }
+
+
+.hero-orbit-wrap {
+  width:52%; height:52%;
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+#globeCanvas {
+  position:absolute;
+  top:0; right:0;
+  width:50%; height:100%;
+  z-index:0; opacity:0.4;
+  pointer-events:none;
+}
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<!-- 3D CANVAS -->
+<canvas id="threeCanvas"></canvas>
+
+<!-- ═══════════════════════════════════
+     NAV
+═══════════════════════════════════ -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <!-- hex bolt icon -->
+    <svg class="nav-logo-icon" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ng" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#6BBDD6"/>
+          <stop offset="100%" stop-color="#1E5C78"/>
+        </linearGradient>
+        <filter id="nf"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <polygon points="18,1 33,10 33,26 18,35 3,26 3,10" fill="none" stroke="#4A9EBF" stroke-width="1" opacity="0.5"/>
+      <polygon points="18,4 30,11 30,25 18,32 6,25 6,11" fill="#4A9EBF" fill-opacity="0.06"/>
+      <polygon points="20,5 11,20 17,20 15,31 25,16 19,16" fill="url(#ng)" filter="url(#nf)"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="nav-logo-hv">HV</span>
+      <span class="nav-logo-sub">Industries</span>
+    </div>
+  </a>
+  <ul class="nav-center">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#ai">AI &amp; Tech</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#rates">Rates</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-btn">Get a Quote</a>
+</nav>
+
+<!-- ═══════════════════════════════════
+     HERO
+═══════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+
+    <!-- LEFT: TEXT -->
+    <div class="hero-text">
+      <div class="hero-tag">
+        <span class="hero-tag-line"></span>
+        Schertz, Texas &mdash; Greater San Antonio
+      </div>
+      <h1 class="hero-h1">
+        HIGH<br>
+        <em>VOLT</em><br>
+        <strong>AGE</strong>
+      </h1>
+      <p class="hero-desc">
+        <b>Modern technology solutions for small businesses and forward-thinking people</b> &mdash; delivered personally by an engineer who stays at the absolute front edge of what's possible. No call centers. No middlemen. Just results.
+      </p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polygon points="13,2 4,14 11,14 11,22 20,10 13,10"/></svg>
+          Start a Project
+        </a>
+        <a href="#services" class="btn-ghost">View Services &rarr;</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: ANIMATED LOGO RINGS -->
+    <div class="hero-logo-wrap">
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-ring"></div>
+      <div class="hero-orbit" class="hero-orbit-wrap">
+        <div class="hero-orbit-dot"></div>
+        <div class="hero-orbit-dot-2"></div>
+      </div>
+      <div class="hero-logo-center">
+        <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="hg" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#6BBDD6"/>
+              <stop offset="100%" stop-color="#1E5C78"/>
+            </linearGradient>
+            <filter id="hf"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <polygon points="18,1 33,10 33,26 18,35 3,26 3,10" fill="none" stroke="#4A9EBF" stroke-width="1" opacity="0.5"/>
+          <polygon points="18,4 30,11 30,25 18,32 6,25 6,11" fill="#4A9EBF" fill-opacity="0.08"/>
+          <polygon points="20,5 11,20 17,20 15,31 25,16 19,16" fill="url(#hg)" filter="url(#hf)"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-n">$75</div><div class="hstat-l">Hourly Rate</div></div>
+    <div class="hstat"><div class="hstat-n hstat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="#6BBDD6"><polygon points="13,2 4,14 11,14 11,22 20,10 13,10"/></svg></div><div class="hstat-l">Paid Discovery</div></div>
+    <div class="hstat"><div class="hstat-n">AI</div><div class="hstat-l">Powered</div></div>
+    <div class="hstat"><div class="hstat-n">TX</div><div class="hstat-l">Local &amp; Personal</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="t-word">Technology Consulting</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">AI Automation</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Smart Integration</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Security Systems</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Custom Software</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">SDR Radio</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Smart Home</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Drone Tech</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Linux &amp; Programming</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Technology Consulting</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">AI Automation</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Smart Integration</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Security Systems</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Custom Software</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">SDR Radio</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Smart Home</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Drone Tech</span><span class="t-dot">&#9679;</span>
+    <span class="t-word">Linux &amp; Programming</span><span class="t-dot">&#9679;</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SERVICES
+═══════════════════════════════════ -->
+<section class="sec sec-alt" id="services">
+  <div class="svcs-layout">
+    <div class="svcs-sidebar">
+      <div class="eyebrow r"><span class="eyebrow-line"></span>What We Do</div>
+      <h2 class="sec-title r sec-title--tight">Modern<br><span class="dim">Solutions</span></h2>
+      <p class="r">We don't just fix problems &mdash; we bring current, forward-thinking technology to your business or home. Every engagement starts with understanding what you actually need, then delivering the best modern answer to it.</p>
+      <a href="#contact" class="btn-primary r btn-mt">Book a Discovery Session</a>
+    </div>
+    <div class="svcs-grid">
+      <div class="svc-card r d1">
+        <div class="svc-n">01</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="svc-name">Technology Consulting</div>
+        <p class="svc-desc">Not sure what tech your business actually needs? We assess your situation and map out a modern, cost-effective path forward &mdash; no upselling, no jargon.</p>
+      </div>
+      <div class="svc-card r d2">
+        <div class="svc-n">02</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div class="svc-name">Security &amp; Networks</div>
+        <p class="svc-desc">Modern security camera systems, network setup, and AI-assisted monitoring. Built right the first time so you're protected without the complexity.</p>
+      </div>
+      <div class="svc-card r d3">
+        <div class="svc-n">03</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="svc-name">Smart Space Integration</div>
+        <p class="svc-desc">Homes and offices that actually work together. Smart devices, automation, and connected systems designed around how you live and work.</p>
+      </div>
+      <div class="svc-card r d4">
+        <div class="svc-n">04</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="svc-name">Custom Tech Builds</div>
+        <p class="svc-desc">When off-the-shelf doesn't cut it. We design and build custom hardware and software solutions tailored exactly to your needs using the latest tools available.</p>
+      </div>
+      <div class="svc-card r d5">
+        <div class="svc-n">05</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg></div>
+        <div class="svc-name">RF &amp; SDR</div>
+        <p class="svc-desc">Software Defined Radio, antenna builds, RF systems, and advanced wireless engineering. We operate at every frequency modern tech demands.</p>
+      </div>
+      <div class="svc-card r d6">
+        <div class="svc-n">06</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
+        <div class="svc-name">Drone &amp; Emerging Tech</div>
+        <p class="svc-desc">Drone systems, IoT sensors, and emerging technology deployments. If it's cutting edge and it solves a real problem, we're already working with it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PCB TRACE CANVAS — behind AI section -->
+<canvas id="pcbCanvas"></canvas>
+<!-- ═══════════════════════════════════
+     AI & TECH EDGE
+═══════════════════════════════════ -->
+<section class="sec" id="ai">
+  <div class="eyebrow r"><span class="eyebrow-line"></span>The Edge</div>
+  <h2 class="sec-title r">AI&nbsp;&amp;&nbsp;Emerging<br><span class="dim">Technology</span></h2>
+
+  <div class="ai-intro-row">
+    <div class="ai-intro-left rl">
+      <h3>Most local tech providers are years behind.<br>We're working with AI right now.</h3>
+      <p class="ai-body-p">While others are still catching up, HV Industries is already using cutting-edge AI tools to build faster, solve harder problems, and deliver results that weren't possible a few years ago. You don't need to understand it &mdash; you just need someone who does.</p>
+    </div>
+    <div class="ai-intro-right rr">
+      <p>"With AI as a force multiplier, the scope of what one engineer can build and deliver has changed completely. Projects that used to take months now take days. Ideas that seemed out of reach are suddenly within range."</p>
+      <cite>&mdash; John, HV Industries</cite>
+    </div>
+  </div>
+
+  <div class="ai-grid">
+    <div class="ai-card r d1">
+      <div class="ai-tag">AI-Powered</div>
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="9" cy="14" r="1" fill="var(--blue)"/><circle cx="15" cy="14" r="1" fill="var(--blue)"/></svg></div>
+      <div class="svc-name">AI Automation</div>
+      <p class="svc-desc">Custom AI workflows that automate repetitive business tasks &mdash; saving hours every week without extra staff.</p>
+    </div>
+    <div class="ai-card r d2">
+      <div class="ai-tag">AI-Powered</div>
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div class="svc-name">Custom Software</div>
+      <p class="svc-desc">Tools, apps, and systems built specifically for how your business works. AI-assisted, human-engineered.</p>
+    </div>
+    <div class="ai-card r d3">
+      <div class="ai-tag">AI-Powered</div>
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div class="svc-name">Web &amp; App Development</div>
+      <p class="svc-desc">Professional sites and web apps built fast. From landing pages to full business portals at a fraction of agency cost.</p>
+    </div>
+    <div class="ai-card r d4">
+      <div class="ai-tag">Emerging Tech</div>
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="svc-name">AI Security</div>
+      <p class="svc-desc">Modern threat detection and network monitoring using AI that catches problems before they become disasters.</p>
+    </div>
+    <div class="ai-card r d5">
+      <div class="ai-tag">Emerging Tech</div>
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+      <div class="svc-name">Data &amp; Analytics</div>
+      <p class="svc-desc">Turn your business data into clear, actionable insight. Dashboards and reporting that actually make sense.</p>
+    </div>
+    <div class="ai-card r d6">
+      <div class="ai-tag">Emerging Tech</div>
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
+      <div class="svc-name">Drone &amp; IoT Systems</div>
+      <p class="svc-desc">Drone builds, IoT sensor networks, connected device systems. Hardware that puts your operation ahead of the curve.</p>
+    </div>
+  </div>
+
+  <div class="advantage r">
+    <div class="advantage-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue-lt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="13,2 4,14 11,14 11,22 20,10 13,10"/>
+      </svg>
+    </div>
+    <div>
+      <div class="advantage-title">The HV Advantage</div>
+      <p class="advantage-body">Most small businesses can't afford a full-time tech team. HV Industries gives you access to the same cutting-edge AI capabilities and technical depth that large companies use &mdash; at a local, personal price. One call. One engineer. Everything handled.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     ABOUT
+═══════════════════════════════════ -->
+<section class="sec sec-alt" id="about" style="overflow:hidden;position:relative">
+  <canvas id="globeCanvas"></canvas>
+  <div class="about-layout">
+    <div class="about-visual rl">
+      <div class="about-frame">
+        <div class="fc fc-tl"></div><div class="fc fc-tr"></div>
+        <div class="fc fc-bl"></div><div class="fc fc-br"></div>
+        <div class="about-frame-inner">
+          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#4A9EBF" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="about-frame-label">John &mdash; HV Industries</span>
+        </div>
+      </div>
+      <div class="about-badge">Schertz, TX<span>High Voltage Tech</span></div>
+    </div>
+    <div class="about-content">
+      <div class="eyebrow r"><span class="eyebrow-line"></span>Who We Are</div>
+      <h2 class="sec-title r sec-title--tight">Built on<br><span class="dim">Real Skills</span></h2>
+      <p class="about-lead r">No call centers. No corporate overhead. Just John &mdash; and decades of hands-on experience with a genuine commitment to staying at the front edge of what's possible.</p>
+      <p class="about-body r">HV Industries was built around one idea: most people and businesses are using yesterday's technology to solve today's problems. Based in Schertz, Texas, we work with small businesses and forward-thinking individuals across Greater San Antonio who want a real engineer &mdash; someone who brings the absolute latest tools and thinking to every engagement, not a help desk script.</p>
+      <div class="tags r">
+        <span class="tag">Electronics</span><span class="tag">Linux</span>
+        <span class="tag">Programming</span><span class="tag">SDR Radio</span>
+        <span class="tag">Cybersecurity</span><span class="tag">Smart Home</span>
+        <span class="tag">AI &amp; Automation</span><span class="tag">Drone Tech</span>
+        <span class="tag">IoT Systems</span>
+      </div>
+      <p class="about-quote r">"The goal is always the same &mdash; bring you forward. To where your technology is working for you, opening doors, and keeping you ahead of the curve."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     RATES
+═══════════════════════════════════ -->
+<section class="sec sec-dark" id="rates">
+  <div class="rates-layout">
+    <div>
+      <div class="eyebrow r"><span class="eyebrow-line"></span>Transparent Pricing</div>
+      <h2 class="sec-title r sec-title--tight">Simple,<br><span class="dim">Fair Rates</span></h2>
+      <p class="r rates-intro">No surprise invoices. No bait-and-switch. You always know the cost before we start a single minute of work.</p>
+      <ul class="rates-list">
+        <li class="r d1"><span class="rates-dot"></span>$75 paid discovery session &mdash; credited toward your project</li>
+        <li class="r d2"><span class="rates-dot"></span>Flat project quotes available for larger builds</li>
+        <li class="r d3"><span class="rates-dot"></span>No hidden fees or surprise charges</li>
+        <li class="r d4"><span class="rates-dot"></span>On-site and remote service options</li>
+        <li class="r d5"><span class="rates-dot"></span>Flexible scheduling around your availability</li>
+        <li class="r d6"><span class="rates-dot"></span>Serving Schertz, Cibolo, Universal City &amp; Greater San Antonio</li>
+      </ul>
+    </div>
+    <div class="rate-card rr">
+      <div class="rate-rc tl"></div><div class="rate-rc br"></div>
+      <div class="rate-label">Standard Hourly Rate</div>
+      <div class="rate-price">$75</div>
+      <div class="rate-per">Per Hour</div>
+      <div class="rate-divider"></div>
+      <p class="rate-note">$75 discovery session &mdash; credited to your project if you proceed. Flat quotes available for larger builds. You always know the cost upfront.</p>
+      <a href="#contact" class="btn-primary btn-mt">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polygon points="13,2 4,14 11,14 11,22 20,10 13,10"/></svg>
+        Book Discovery Session
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     WORK — HIDDEN UNTIL REAL CONTENT
+═══════════════════════════════════ -->
+<section class="sec sec-alt" id="work" style="display:none">
+  <div class="eyebrow r"><span class="eyebrow-line"></span>Real Work</div>
+  <h2 class="sec-title r">Projects &amp;<br><span class="dim">Results</span></h2>
+
+  <!-- PROJECT CARDS -->
+  <div class="proof-grid">
+
+    <div class="proof-card r d1">
+      <div class="proof-card-top">
+        <div class="proof-tag">Smart Integration</div>
+        <div class="proof-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+      </div>
+      <div class="proof-title proof-placeholder">Coming Soon</div>
+      <p class="proof-desc proof-placeholder-text">Project details coming soon. Reach out to discuss your specific needs.</p>
+      <div class="proof-result">
+        <span class="proof-result-label">Result</span>
+        <span class="proof-result-val proof-placeholder-text">Results to be published</span>
+      </div>
+    </div>
+
+    <div class="proof-card r d2">
+      <div class="proof-card-top">
+        <div class="proof-tag">AI Automation</div>
+        <div class="proof-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+      </div>
+      <div class="proof-title proof-placeholder">Coming Soon</div>
+      <p class="proof-desc proof-placeholder-text">Project details coming soon. Reach out to discuss your specific needs.</p>
+      <div class="proof-result">
+        <span class="proof-result-label">Result</span>
+        <span class="proof-result-val proof-placeholder-text">Results to be published</span>
+      </div>
+    </div>
+
+    <div class="proof-card r d3">
+      <div class="proof-card-top">
+        <div class="proof-tag">Custom Build</div>
+        <div class="proof-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <rect x="9" y="9" width="6" height="6"/><line x1="9" y1="9" x2="5" y2="5"/><line x1="9" y1="12" x2="3" y2="12"/><line x1="9" y1="15" x2="5" y2="19"/><line x1="15" y1="9" x2="19" y2="5"/><line x1="15" y1="12" x2="21" y2="12"/><line x1="15" y1="15" x2="19" y2="19"/>
+          </svg>
+        </div>
+      </div>
+      <div class="proof-title proof-placeholder">Coming Soon</div>
+      <p class="proof-desc proof-placeholder-text">Project details coming soon. Reach out to discuss your specific needs.</p>
+      <div class="proof-result">
+        <span class="proof-result-label">Result</span>
+        <span class="proof-result-val proof-placeholder-text">Results to be published</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="testi-label r"><span class="eyebrow-line"></span>What Clients Say</div>
+  <div class="testi-grid">
+
+    <div class="testi-card r d1">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">Testimonial coming soon. If we've worked together and you'd like to share your experience, reach out &mdash; we'd love to feature your story here.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">J</div>
+        <div>
+          <div class="testi-name proof-placeholder-text">Client Name</div>
+          <div class="testi-role">Schertz, TX</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card r d2">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">Testimonial coming soon. If we've worked together and you'd like to share your experience, reach out &mdash; we'd love to feature your story here.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">S</div>
+        <div>
+          <div class="testi-name proof-placeholder-text">Client Name</div>
+          <div class="testi-role">Schertz, TX</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card r d3">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">Testimonial coming soon. If we've worked together and you'd like to share your experience, reach out &mdash; we'd love to feature your story here.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">M</div>
+        <div>
+          <div class="testi-name proof-placeholder-text">Client Name</div>
+          <div class="testi-role">Schertz, TX</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     CONTACT
+═══════════════════════════════════ -->
+<section class="sec" id="contact">
+  <div class="contact-layout">
+    <div class="contact-intro">
+      <div class="eyebrow r"><span class="eyebrow-line"></span>Reach Out</div>
+      <h2 class="sec-title r sec-title--tight">Let's<br><span class="dim">Talk</span></h2>
+      <p class="r">Ready to move forward? Book a paid discovery session and we'll map out exactly what you need and what it will cost. That $75 gets credited straight to your project.</p>
+      <div class="cinfo">
+        <div class="cinfo-row r d1">
+          <div class="cinfo-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.29 12 19.79 19.79 0 0 1 .21 3.37 2 2 0 0 1 2.18 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L6.91 8.15a16 16 0 0 0 6 6l1.51-1.51a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="cinfo-label">Phone / Text</div><div class="cinfo-val">(210) 416-0640</div></div>
+        </div>
+        <div class="cinfo-row r d2">
+          <div class="cinfo-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="cinfo-label">Email</div><div class="cinfo-val">hvindustries73&#64;gmail&#46;com</div></div>
+        </div>
+        <div class="cinfo-row r d3">
+          <div class="cinfo-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="cinfo-label">Location</div><div class="cinfo-val">Schertz, Texas<br><span class="cinfo-sub">Greater San Antonio Area</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form rr">
+      <div class="frow">
+        <div class="fg"><label>Your Name</label><input type="text" placeholder="John Smith"></div>
+        <div class="fg"><label>Phone or Email</label><input type="text" placeholder="Best way to reach you"></div>
+      </div>
+      <div class="fg"><label>What Do You Need?</label><input type="text" placeholder="AI automation, smart systems, custom build, tech consulting..."></div>
+      <div class="fg"><label>Tell Us More</label><textarea placeholder="Describe the problem or project in as much detail as you'd like..."></textarea></div>
+      <button class="f-submit" id="fsub">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polygon points="13,2 4,14 11,14 11,22 20,10 13,10"/></svg>
+        Send Message
+      </button>
+      <p class="text-me">OR JUST TEXT ME DIRECTLY &mdash; <a href="sms:2104160640" class="text-me-link">(210) 416-0640</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     FOOTER
+═══════════════════════════════════ -->
+<footer class="footer">
+  <a href="#" class="footer-logo">
+    <svg width="28" height="28" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="fg2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#6BBDD6"/><stop offset="100%" stop-color="#1E5C78"/>
+        </linearGradient>
+      </defs>
+      <polygon points="18,1 33,10 33,26 18,35 3,26 3,10" fill="none" stroke="#4A9EBF" stroke-width="1" opacity="0.4"/>
+      <polygon points="20,5 11,20 17,20 15,31 25,16 19,16" fill="url(#fg2)"/>
+    </svg>
+    <span class="footer-logo-hv">HV Industries</span>
+  </a>
+  <nav class="footer-nav">
+    <a href="#services">Services</a>
+    <a href="#ai">AI &amp; Tech</a>
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#rates">Rates</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="footer-copy">&copy; 2025 HV Industries &middot; Schertz, TX</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CURSOR
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var dot = document.getElementById('curDot');
+var ring = document.getElementById('curRing');
+var mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function loop(){
+  rx+=(mx-rx)*.11; ry+=(my-ry)*.11;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// THREE.JS — 3D PARTICLE FIELD
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var canvas = document.getElementById('threeCanvas');
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
+  camera.position.z = 600;
+
+  // 3D particles with depth
+  var count = 1800;
+  var positions = new Float32Array(count * 3);
+  var colors    = new Float32Array(count * 3);
+  var sizes     = new Float32Array(count);
+
+  for(var i=0; i<count; i++){
+    positions[i*3]   = (Math.random()-0.5)*2400;
+    positions[i*3+1] = (Math.random()-0.5)*2400;
+    positions[i*3+2] = (Math.random()-0.5)*1600;
+    var depth = (positions[i*3+2] + 800) / 1600; // 0..1
+    colors[i*3]   = 0.18 + depth*0.24; // R
+    colors[i*3+1] = 0.50 + depth*0.24; // G
+    colors[i*3+2] = 0.62 + depth*0.13; // B
+    sizes[i] = 0.5 + depth*2.5;
+  }
+
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(colors,3));
+  geo.setAttribute('size',     new THREE.BufferAttribute(sizes,1));
+
+  var mat = new THREE.PointsMaterial({
+    size:2.2,
+    vertexColors:true,
+    transparent:true,
+    opacity:0.7,
+    sizeAttenuation:true,
+    depthWrite:false,
+  });
+
+  var points = new THREE.Points(geo, mat);
+  scene.add(points);
+
+  // Connection lines between nearby particles (subset for perf)
+  var lineGeo = new THREE.BufferGeometry();
+  var lineVerts = [];
+  var subset = 280;
+  for(var i=0;i<subset;i++){
+    for(var j=i+1;j<subset;j++){
+      var dx=positions[i*3]-positions[j*3];
+      var dy=positions[i*3+1]-positions[j*3+1];
+      var dz=positions[i*3+2]-positions[j*3+2];
+      var d=Math.sqrt(dx*dx+dy*dy+dz*dz);
+      if(d<180){
+        lineVerts.push(positions[i*3],positions[i*3+1],positions[i*3+2]);
+        lineVerts.push(positions[j*3],positions[j*3+1],positions[j*3+2]);
+      }
+    }
+  }
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lineVerts),3));
+  var lineMat = new THREE.LineBasicMaterial({color:0x4A9EBF, transparent:true, opacity:0.06});
+  scene.add(new THREE.LineSegments(lineGeo, lineMat));
+
+  // mouse parallax
+  var mouseX=0, mouseY=0;
+  document.addEventListener('mousemove',function(e){
+    mouseX=(e.clientX/window.innerWidth-0.5)*2;
+    mouseY=(e.clientY/window.innerHeight-0.5)*2;
+  });
+
+  window.addEventListener('resize',function(){
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  });
+
+  var clock = new THREE.Clock();
+  (function animate(){
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+    points.rotation.y = t * 0.018;
+    points.rotation.x = t * 0.007;
+    camera.position.x += (mouseX*80 - camera.position.x)*0.03;
+    camera.position.y += (-mouseY*80 - camera.position.y)*0.03;
+    camera.lookAt(scene.position);
+    renderer.render(scene,camera);
+  })();
+})();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// THREE.JS — 3D ROTATING HEX BOLT LOGO
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var container = document.querySelector('.hero-logo-center');
+  if(!container) return;
+
+  // Replace SVG with a Three.js canvas
+  container.innerHTML = '';
+  var canvas = document.createElement('canvas');
+  canvas.width = 192; canvas.height = 192;
+  canvas.style.cssText = 'width:96px;height:96px;border-radius:50%';
+  container.appendChild(canvas);
+
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(2);
+  renderer.setSize(192,192);
+  renderer.setClearColor(0x000000,0);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45,1,0.1,100);
+  camera.position.z = 3.2;
+
+  // Hexagonal prism body
+  var hexGeo = new THREE.CylinderGeometry(0.8,0.8,0.3,6,1);
+  var hexMat = new THREE.MeshPhongMaterial({
+    color:0x0B1826,
+    emissive:0x0A2535,
+    specular:0x4A9EBF,
+    shininess:120,
+    transparent:true,
+    opacity:0.95,
+  });
+  var hex = new THREE.Mesh(hexGeo, hexMat);
+  hex.rotation.x = Math.PI/2;
+  scene.add(hex);
+
+  // Wireframe removed — clean hex only
+
+  // Lightning bolt — extruded from exact SVG polygon points
+  // Original SVG: points="13,2 4,14 11,14 11,22 20,10 13,10"
+  // Normalized to -0.5..0.5 range (SVG was 0-24 viewBox)
+  var boltShape = new THREE.Shape();
+  var pts = [
+    [13,2],[4,14],[11,14],[11,22],[20,10],[13,10]
+  ].map(function(p){ return [(p[0]-12)/16, -(p[1]-12)/16]; });
+  boltShape.moveTo(pts[0][0], pts[0][1]);
+  for(var pi=1;pi<pts.length;pi++) boltShape.lineTo(pts[pi][0],pts[pi][1]);
+  boltShape.closePath();
+
+  var extrudeSettings = { depth:0.16, bevelEnabled:true, bevelThickness:0.03, bevelSize:0.03, bevelSegments:4 };
+  var boltGeo = new THREE.ExtrudeGeometry(boltShape, extrudeSettings);
+  boltGeo.center();
+
+  var boltMat = new THREE.MeshPhongMaterial({
+    color:0x6BBDD6, emissive:0x1A4A60, specular:0xffffff, shininess:240, flatShading:false
+  });
+  var boltMesh = new THREE.Mesh(boltGeo, boltMat);
+  boltMesh.position.z = 0.16;
+  scene.add(boltMesh);
+
+  // Glow sphere behind bolt
+  var glowGeo = new THREE.SphereGeometry(0.5,16,16);
+  var glowMat = new THREE.MeshBasicMaterial({color:0x4A9EBF, transparent:true, opacity:0.06});
+  scene.add(new THREE.Mesh(glowGeo, glowMat));
+
+  // Orbit ring removed — dot only
+
+  // Orbiting dot on the ring
+  var orbitDotGeo = new THREE.SphereGeometry(0.04,8,8);
+  var orbitDotMat = new THREE.MeshBasicMaterial({color:0x6BBDD6});
+  var orbitDot = new THREE.Mesh(orbitDotGeo, orbitDotMat);
+  scene.add(orbitDot);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0x0A1520, 2));
+  var light1 = new THREE.PointLight(0x4A9EBF, 3, 10);
+  light1.position.set(2,2,2);
+  scene.add(light1);
+  var light2 = new THREE.PointLight(0x6BBDD6, 2, 8);
+  light2.position.set(-2,-1,1);
+  scene.add(light2);
+
+  var clock = new THREE.Clock();
+  (function animate(){
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+    hex.rotation.y = t*0.6;
+    boltMesh.rotation.y = t*0.6;
+
+    // orbit dot follows the ring
+    orbitDot.position.set(
+      Math.cos(t*1.2)*1.05,
+      Math.sin(t*1.2)*1.05*0.15,
+      Math.sin(t*1.2)*1.05
+    );
+    // subtle tilt based on time
+    var group_tilt = Math.sin(t*0.4)*0.15;
+    hex.rotation.x = Math.PI/2 + group_tilt;
+
+    renderer.render(scene,camera);
+  })();
+})();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// PCB TRACE ANIMATION — AI section
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var canvas = document.getElementById('pcbCanvas');
+  if(!canvas) return;
+  var section = document.getElementById('ai');
+  var ctx = canvas.getContext('2d');
+  var W,H;
+
+  function resize(){
+    W = canvas.width  = section.offsetWidth;
+    H = canvas.height = section.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Grid of nodes
+  var GRID = 52;
+  var nodes = [];
+  var traces = [];
+  var pulses = [];
+
+  function buildGrid(){
+    nodes = [];
+    traces = [];
+    pulses = [];
+    var cols = Math.ceil(W/GRID)+1;
+    var rows = Math.ceil(H/GRID)+1;
+    for(var r=0;r<=rows;r++){
+      for(var c=0;c<=cols;c++){
+        nodes.push({
+          x: c*GRID + (Math.random()-0.5)*8,
+          y: r*GRID + (Math.random()-0.5)*8
+        });
+      }
+    }
+    var totalCols = cols+1;
+    for(var i=0;i<nodes.length;i++){
+      // horizontal neighbour — only if same row
+      var right = i+1;
+      if(right < nodes.length && Math.floor(i/totalCols) === Math.floor(right/totalCols)){
+        if(Math.random()<0.4) traces.push({a:i, b:right});
+      }
+      // vertical neighbour — row below
+      var below = i + totalCols;
+      if(below < nodes.length){
+        if(Math.random()<0.4) traces.push({a:i, b:below});
+      }
+    }
+  }
+  buildGrid();
+  window.addEventListener('resize',buildGrid);
+
+  // Spawn pulses along traces
+  setInterval(function(){
+    if(traces.length===0) return;
+    var t = traces[Math.floor(Math.random()*traces.length)];
+    pulses.push({trace:t, progress:0, speed:0.004+Math.random()*0.006});
+  }, 180);
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Draw base traces
+    ctx.strokeStyle='rgba(74,158,191,0.12)';
+    ctx.lineWidth=1;
+    traces.forEach(function(t){
+      var a=nodes[t.a], b=nodes[t.b];
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    });
+
+    // Draw nodes (vias)
+    ctx.fillStyle='rgba(74,158,191,0.2)';
+    nodes.forEach(function(n){
+      ctx.beginPath(); ctx.arc(n.x,n.y,1.5,0,Math.PI*2); ctx.fill();
+    });
+
+    // Animate pulses
+    pulses.forEach(function(p,idx){
+      var a=nodes[p.trace.a], b=nodes[p.trace.b];
+      if(!a||!b) return;
+      var px = a.x + (b.x-a.x)*p.progress;
+      var py = a.y + (b.y-a.y)*p.progress;
+      // glow trail
+      var grad = ctx.createRadialGradient(px,py,0,px,py,18);
+      grad.addColorStop(0,'rgba(107,189,214,0.9)');
+      grad.addColorStop(0.4,'rgba(74,158,191,0.4)');
+      grad.addColorStop(1,'rgba(74,158,191,0)');
+      ctx.fillStyle=grad;
+      ctx.beginPath(); ctx.arc(px,py,18,0,Math.PI*2); ctx.fill();
+      // bright center dot
+      ctx.fillStyle='rgba(180,230,245,0.95)';
+      ctx.beginPath(); ctx.arc(px,py,2,0,Math.PI*2); ctx.fill();
+
+      p.progress += p.speed;
+      if(p.progress>=1) pulses.splice(idx,1);
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// THREE.JS — WIREFRAME GLOBE (About)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(function(){
+  var canvas = document.getElementById('globeCanvas');
+  if(!canvas) return;
+
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setClearColor(0x000000,0);
+
+  function setSize(){
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+    camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+    camera.updateProjectionMatrix();
+  }
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0,0,3.2);
+  setSize();
+  window.addEventListener('resize', setSize);
+
+  // Globe wireframe
+  var globeGeo = new THREE.SphereGeometry(1, 32, 18);
+  var globeMat = new THREE.MeshBasicMaterial({
+    color:0x4A9EBF, wireframe:true, transparent:true, opacity:0.12
+  });
+  var globe = new THREE.Mesh(globeGeo, globeMat);
+  scene.add(globe);
+
+  // Solid inner glow
+  var innerGeo = new THREE.SphereGeometry(0.97, 24, 16);
+  var innerMat = new THREE.MeshBasicMaterial({
+    color:0x0A1825, transparent:true, opacity:0.85
+  });
+  scene.add(new THREE.Mesh(innerGeo, innerMat));
+
+  // Lat/long lines — rings
+  [0, 23.5, 45, 66.5].forEach(function(lat){
+    var rad = lat * Math.PI/180;
+    var r = Math.cos(rad);
+    var y = Math.sin(rad);
+    var ringG = new THREE.TorusGeometry(r, 0.006, 4, 64);
+    var ringM = new THREE.MeshBasicMaterial({color:0x4A9EBF, transparent:true, opacity:0.2});
+    var ring = new THREE.Mesh(ringG, ringM);
+    ring.position.y = y;
+    scene.add(ring);
+    if(lat!==0){
+      var ring2 = new THREE.Mesh(ringG, ringM);
+      ring2.position.y = -y;
+      scene.add(ring2);
+    }
+  });
+
+  // Texas marker — San Antonio approx lat 29.4°N, lon -98.5°W
+  function latLonToVec3(lat,lon,r){
+    var phi   = (90-lat) * Math.PI/180;
+    var theta = (lon+180) * Math.PI/180;
+    return new THREE.Vector3(
+      -r*Math.sin(phi)*Math.cos(theta),
+       r*Math.cos(phi),
+       r*Math.sin(phi)*Math.sin(theta)
+    );
+  }
+  var saPos = latLonToVec3(29.4, -98.5, 1.02);
+
+  // Pulsing dot at San Antonio
+  var dotGeo = new THREE.SphereGeometry(0.035,8,8);
+  var dotMat = new THREE.MeshBasicMaterial({color:0x6BBDD6});
+  var saDot = new THREE.Mesh(dotGeo, dotMat);
+  saDot.position.copy(saPos);
+  scene.add(saDot);
+
+  // Ping ring around SA
+  var pingGeo = new THREE.TorusGeometry(0.07, 0.008, 4, 32);
+  var pingMat = new THREE.MeshBasicMaterial({color:0x6BBDD6, transparent:true, opacity:0.8});
+  var ping = new THREE.Mesh(pingGeo, pingMat);
+  ping.position.copy(saPos);
+  // Orient ring to face outward from sphere surface
+  ping.lookAt(new THREE.Vector3(0,0,0));
+  ping.rotateX(Math.PI/2);
+  scene.add(ping);
+
+  // Radiating lines from SA to random world points
+  var lineConnections = [
+    latLonToVec3(40.7, -74.0, 1.02),  // New York
+    latLonToVec3(51.5, -0.1,  1.02),  // London
+    latLonToVec3(35.6, 139.7, 1.02),  // Tokyo
+    latLonToVec3(19.4, -99.1, 1.02),  // Mexico City
+    latLonToVec3(30.0, 31.2,  1.02),  // Cairo
+  ];
+  lineConnections.forEach(function(dest){
+    var lGeo = new THREE.BufferGeometry().setFromPoints([
+      saPos.clone().multiplyScalar(0.99),
+      dest.clone().multiplyScalar(0.99)
+    ]);
+    var lMat = new THREE.LineBasicMaterial({color:0x4A9EBF, transparent:true, opacity:0.15});
+    scene.add(new THREE.Line(lGeo, lMat));
+    // endpoint dot
+    var eDot = new THREE.Mesh(new THREE.SphereGeometry(0.018,4,4),
+      new THREE.MeshBasicMaterial({color:0x4A9EBF, transparent:true, opacity:0.5}));
+    eDot.position.copy(dest);
+    scene.add(eDot);
+  });
+
+  // Ambient light
+  scene.add(new THREE.AmbientLight(0x4A9EBF, 0.5));
+
+  var clock = new THREE.Clock();
+  (function animate(){
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+    globe.rotation.y = t * 0.12;
+    // pulse ping ring
+    var pingScale = 1 + Math.sin(t*2)*0.4;
+    ping.scale.setScalar(pingScale);
+    pingMat.opacity = 0.8 - Math.sin(t*2)*0.5;
+    // pulse SA dot
+    var dotScale = 1 + Math.sin(t*3)*0.3;
+    saDot.scale.setScalar(dotScale);
+    renderer.render(scene,camera);
+  })();
+})();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SCROLL REVEAL
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var els=document.querySelectorAll('.r,.rl,.rr');
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('show'); });
+},{threshold:.08});
+els.forEach(function(el){ io.observe(el); });
+
+// ── FORM
+document.getElementById('fsub').addEventListener('click',function(){
+  var b=this;
+  b.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polyline points="20 6 9 17 4 12" stroke="#fff" stroke-width="2" fill="none"/></svg> Message Sent';
+  b.style.background='#2A9D8F';
+  setTimeout(function(){
+    b.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polygon points="13,2 4,14 11,14 11,22 20,10 13,10"/></svg> Send Message';
+    b.style.background='var(--blue)';
+  },3500);
+});
+</script>
+</body>
+</html>
